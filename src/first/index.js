@@ -1,3 +1,5 @@
+// @flow
+
 //  Write the code, one line for each action:
 //
 // Create an empty object user.

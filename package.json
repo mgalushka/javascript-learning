@@ -9,13 +9,15 @@
   "private": false,
   "scripts": {
     "build": "babel src -d lib",
-    "test": "jest"
+    "test": "jest",
+    "flow": "flow"
   },
   "devDependencies": {
     "@babel/cli": "^7.6.2",
     "@babel/core": "^7.6.2",
     "@babel/preset-flow": "^7.0.0",
     "babel-cli": "^6.26.0",
+    "flow-bin": "^0.109.0",
     "jest-cli": "^24.9.0"
   },
   "dependencies": {
