@@ -12,6 +12,10 @@
     "test": "jest"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0"
+    "babel-cli": "^6.26.0",
+    "jest-cli": "^24.9.0"
+  },
+  "dependencies": {
+    "node": "6.0.0"
   }
 }
