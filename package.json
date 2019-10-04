@@ -1,0 +1,10 @@
+{
+  "name": "javascript-learning",
+  "version": "1.0.0",
+  "description": "My learning experience of javascript",
+  "main": "index.js",
+  "repository": "git@github.com:mgalushka/javascript-learning.git",
+  "author": "Maxim Galushka <mgalushka@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
