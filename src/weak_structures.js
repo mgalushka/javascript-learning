@@ -14,7 +14,7 @@
 type Message = {
   text: string,
   from: string,
-};
+}
 
 let messages: Message[] = [
   {text: "Hello", from: "John"},
@@ -28,3 +28,8 @@ const markAsRead = (msg: Message) => isReadSet.add(msg);
 
 markAsRead(messages[0]);
 console.log(isRead(messages[0]) === true);
+
+module.exports = {
+  markAsRead,
+  isRead,
+}
