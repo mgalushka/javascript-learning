@@ -65,3 +65,21 @@ const salariesSum = (salaries) => {
     0);
 }
 console.log(salariesSum(salaries) === 390);
+
+// Property flags
+// https://javascript.info/property-descriptors#property-flags
+let descriptor = Object.getOwnPropertyDescriptor(salaries, "John");
+console.log(descriptor);
+
+// Proxy
+var handler = {
+    get: function(obj, prop) {
+        return prop in obj ?
+            obj[prop] :
+            "missing";
+    }
+};
+
+var p = new Proxy({}, handler);
+console.log(p.someMissingProperty)
+console.log(p.someMissingProperty === "missing")
