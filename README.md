@@ -26,12 +26,23 @@ yarn add --dev jest
 yarn add --dev babel-jest babel-plugin-transform-flow-strip-types
 ```
 
-Check jest version
+
+What's the right way to write Jest tests verified with Flow?
+https://stackoverflow.com/a/50805762/2075157
+1. Check jest version
 ```
 npx jest -v
 ```
 
-Install flow-typed
+2. Install flow-typed
 ```
 npx flow-typed install jest@24.9.0
+```
+
+3. Add flow-typed in .flowconfig file
+```
+...
+[libs]
+flow-typed
+...
 ```
