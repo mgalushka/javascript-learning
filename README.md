@@ -21,6 +21,17 @@ yarn run jest --watchAll
 
 ```
 yarn add --dev @babel/core @babel/cli @babel/preset-flow
-yarn add --dev jest
 yarn add --dev @babel/node
+yarn add --dev jest
+yarn add --dev babel-jest babel-plugin-transform-flow-strip-types
+```
+
+Check jest version
+```
+npx jest -v
+```
+
+Install flow-typed
+```
+npx flow-typed install jest@24.9.0
 ```

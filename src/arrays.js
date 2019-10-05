@@ -8,7 +8,7 @@
 // and returns thesum of these numbers.
 // Run the example program and see whether it does indeed return 55.
 */
-const range = (start: number, end: number) => {
+const range = (start: number, end: number): number[] => {
   let result: number[] = [];
   if (start > end) {
     return result;
@@ -19,7 +19,7 @@ const range = (start: number, end: number) => {
   return result;
 }
 
-const sum = (numbers: number[]) => {
+const sum = (numbers: number[]): number => {
   return numbers.reduce((acc, current) => acc + current, 0);
 }
 
