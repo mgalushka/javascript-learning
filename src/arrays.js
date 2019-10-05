@@ -10,7 +10,7 @@
 */
 const range = (start: number, end: number) => {
   let result: number[] = [];
-  if (start < end) {
+  if (start > end) {
     return result;
   }
   for (let i=start; i<end; i++) {
@@ -23,4 +23,5 @@ const sum = (numbers: number[]) => {
   return numbers.reduce((acc, current) => acc + current, 0);
 }
 
+console.log(range(1, 10));
 console.log(sum(range(1, 10)));
