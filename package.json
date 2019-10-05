@@ -5,24 +5,19 @@
   "repository": "git@github.com:mgalushka/javascript-learning.git",
   "author": "Maxim Galushka <mgalushka@gmail.com>",
   "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/node": "^7.6.2",
+    "@babel/preset-flow": "^7.0.0",
+    "flow-bin": "^0.109.0",
+    "jest": "^24.9.0",
+    "node": "^12.11.0"
+  },
   "scripts": {
     "flow": "flow",
     "build": "babel src -d lib",
     "test": "jest",
     "flow:watch": "flow-watch"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "flow-bin": "^0.105.1",
-    "flow-watch": "^1.1.4",
-    "jest": "^24.8.0",
-    "moment": "^2.24.0"
-  },
-  "dependencies": {
-    "@babel/plugin-proposal-export-default-from": "^7.5.2",
-    "babel-jest": "^24.8.0",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0"
   }
 }
