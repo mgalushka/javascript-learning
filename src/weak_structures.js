@@ -23,8 +23,10 @@ let messages: Message[] = [
 ];
 let isReadSet: WeakSet<Message> = new WeakSet();
 
-const isRead = (msg: Message) => isReadSet.has(msg);
-const markAsRead = (msg: Message) => isReadSet.add(msg);
+const isRead = (msg: Message): boolean => isReadSet.has(msg);
+const markAsRead = (msg: Message): void => {
+  isReadSet.add(msg);
+}
 
 markAsRead(messages[0]);
 console.log(isRead(messages[0]) === true);

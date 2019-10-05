@@ -25,3 +25,9 @@ const sum = (numbers: number[]): number => {
 
 console.log(range(1, 10));
 console.log(sum(range(1, 10)));
+
+
+module.exports = {
+  range,
+  sum
+}
