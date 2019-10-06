@@ -1,5 +1,8 @@
 # javascript-learning
-My learning experience of javascript
+My learning experience of javascript language.
+
+This code is based on exercises from javascript.info and
+"Eloquent JavaScript" book by Marijn Haverbeke.
 
 How to run script:
 ```
@@ -19,6 +22,8 @@ yarn run jest --watchAll
 
 # Setup instructions
 
+To create new javascript template project with babel support,
+flow typing and jest tests - use these yarn modules:
 ```
 yarn add --dev @babel/core @babel/cli @babel/preset-flow
 yarn add --dev @babel/node
