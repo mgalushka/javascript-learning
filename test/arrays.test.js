@@ -22,4 +22,8 @@ test('arrays reverse', () => {
   expect(reversed.length).toEqual(3);
   expect(reversed).toEqual([5, 3, 1]);
 
+  const input1: number[] = [1, 3, 5];
+  const reversedInPlace: number[] = arrays.reverseArrayInPlace(input1);
+  expect(reversedInPlace.length).toEqual(3);
+  expect(reversedInPlace).toEqual([5, 3, 1]);
 });

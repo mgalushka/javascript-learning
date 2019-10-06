@@ -30,8 +30,8 @@ console.log(sum(range(1, 10)));
  * This takes an array as argument
  * and produces a new array that has the same elements in the inverse order.
  */
-const reverseArray = (input: number[]): number[] => {
-  let result: number[] = [];
+const reverseArray = (input: any[]): any[] => {
+  let result: any[] = [];
   if (input.length === 0){
     return result;
   }
@@ -43,17 +43,17 @@ const reverseArray = (input: number[]): number[] => {
 
 const swap = (array: any[], a: number, b: number): void => {
   if (
-    number.length === 0 ||
+    array.length === 0 ||
     a < 0 ||
     b < 0 ||
-    a >= number.length ||
-    b >= number.length
+    a >= array.length ||
+    b >= array.length
   ) {
     return;
   }
   let t: typeof array = array[b];
-  array[a] = array[b];
-  array[b] = t;
+  array[b] = array[a];
+  array[a] = t;
 }
 
 /*
@@ -61,16 +61,19 @@ const swap = (array: any[], a: number, b: number): void => {
  * and modifies the array given as argument by reversing its elements.
  */
 const reverseArrayInPlace = (input: any[]): any[] => {
-  let result: any[] = [];
   if (input.length === 0){
-    return result;
+    return [];
   }
-  const
-  return result;
+  const mid = input.length / 2;
+  for (let i = 0; i < mid; i++) {
+    swap(input, i, input.length - i - 1);
+  }
+  return input;
 }
 
 module.exports = {
   range,
   sum,
-  reverseArray
+  reverseArray,
+  reverseArrayInPlace
 }
