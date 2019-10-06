@@ -61,8 +61,8 @@ const swap = (array: any[], a: number, b: number): void => {
  * and modifies the array given as argument by reversing its elements.
  */
 const reverseArrayInPlace = (input: any[]): any[] => {
-  if (input.length === 0){
-    return [];
+  if (input.length <= 1){
+    return input;
   }
   const mid = input.length / 2;
   for (let i = 0; i < mid; i++) {
