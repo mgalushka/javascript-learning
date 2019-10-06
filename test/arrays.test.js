@@ -29,3 +29,7 @@ test('arrays reverse', () => {
 
   expect(arrays.reverseArrayInPlace([7])).toEqual([7]);
 });
+
+test('array equals', () => {
+  expect(arrays.arrayDeepEquals([1,2,3], [1,2,3])).toEqual(true);
+});

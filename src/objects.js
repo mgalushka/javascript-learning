@@ -8,6 +8,8 @@
 // Change the value of the name to Pete.
 // Remove the property name from the object.
 
+const arrays = require("./arrays");
+
 let user = {};
 console.log(user);
 
@@ -71,7 +73,76 @@ const salariesSum = (salaries: Object): number => {
 let descriptor = Object.getOwnPropertyDescriptor(salaries, "John");
 console.log(descriptor);
 
+const deepEquals = (a: Object, b: Object): boolean => {
+  let aKeys = Object.keys(a);
+  let bKeys = Object.keys(b);
+  if (aKeys.length !== bKeys.length) {
+    return false;
+  }
+  for (let key of aKeys) {
+    if (!(key in b)) {
+      console.log(`${key} is missing in B`);
+      return false;
+    }
+    const aValue = a[key];
+    const bValue = b[key];
+    if (aValue === undefined || aValue === null || typeof aValue != "object") {
+      const primitive = primitiveEquals(aValue, bValue);
+      if (!primitive) return false;
+      else {
+        continue;
+      }
+    }
+
+    // nested array or nested object
+    if (typeof aValue == "object") {
+      console.log("typeof aValue == object");
+      if ("length" in aValue) {
+        console.log("length in aValue");
+        if (bValue === null || !("length" in bValue)) {
+          console.log(`bValue === null OR "length" NOT in bValue(${bValue})`);
+          return false;
+        } else {
+          if (aValue.length !== bValue.length) {
+            console.log(
+              `aValue.length(${aValue.length})
+              !== bValue.length(${bValue.length})`
+            );
+            return false;
+          }
+          for (let index = 0; index < aValue.length; index++) {
+            if (
+              aValue[index] === undefined ||
+              aValue[index] === null ||
+              typeof aValue[index] != "object"
+            ) {
+              const primitive = primitiveEquals(aValue[index], bValue[index]);
+              if (!primitive) return false;
+            } else {
+              return deepEquals(aValue[index], bValue[index]);
+            }
+          }
+        }
+      } else {
+        console.log("deepEquals");
+        return deepEquals(aValue, bValue);
+      }
+    }
+  }
+  return true;
+}
+
+const primitiveEquals = (a: any, b: any): boolean => {
+  if (a !== b) {
+    console.log(`Primitive a(${a}) !== b(${b})`);
+    return false;
+  }
+  console.log(`Primitive a(${a}) === b(${b})`);
+  return true;
+}
+
 module.exports = {
   isEmpty,
-  salariesSum
+  salariesSum,
+  deepEquals
 }
