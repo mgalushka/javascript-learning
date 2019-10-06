@@ -41,15 +41,31 @@ const reverseArray = (input: number[]): number[] => {
   return result;
 }
 
+const swap = (array: any[], a: number, b: number): void => {
+  if (
+    number.length === 0 ||
+    a < 0 ||
+    b < 0 ||
+    a >= number.length ||
+    b >= number.length
+  ) {
+    return;
+  }
+  let t: typeof array = array[b];
+  array[a] = array[b];
+  array[b] = t;
+}
+
 /*
  * This takes an array as argument
  * and modifies the array given as argument by reversing its elements.
  */
-const reverseArrayInPlace = (input: number[]): number[] => {
-  let result: number[] = [];
+const reverseArrayInPlace = (input: any[]): any[] => {
+  let result: any[] = [];
   if (input.length === 0){
     return result;
   }
+  const
   return result;
 }
 
