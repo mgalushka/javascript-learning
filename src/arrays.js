@@ -26,8 +26,35 @@ const sum = (numbers: number[]): number => {
 console.log(range(1, 10));
 console.log(sum(range(1, 10)));
 
+/*
+ * This takes an array as argument
+ * and produces a new array that has the same elements in the inverse order.
+ */
+const reverseArray = (input: number[]): number[] => {
+  let result: number[] = [];
+  if (input.length === 0){
+    return result;
+  }
+  for (let i = input.length-1; i >= 0; i--) {
+    result.push(input[i]);
+  }
+  return result;
+}
+
+/*
+ * This takes an array as argument
+ * and modifies the array given as argument by reversing its elements.
+ */
+const reverseArrayInPlace = (input: number[]): number[] => {
+  let result: number[] = [];
+  if (input.length === 0){
+    return result;
+  }
+  return result;
+}
 
 module.exports = {
   range,
-  sum
+  sum,
+  reverseArray
 }

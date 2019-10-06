@@ -13,3 +13,13 @@ test('arrays sum', () => {
   const sum0: number = arrays.sum(range1);
   expect(sum0).toEqual(9);
 });
+
+test('arrays reverse', () => {
+  expect(arrays.reverseArray([])).toEqual([]);
+
+  const input: number[] = [1, 3, 5];
+  const reversed: number[] = arrays.reverseArray(input);
+  expect(reversed.length).toEqual(3);
+  expect(reversed).toEqual([5, 3, 1]);
+
+});
