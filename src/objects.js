@@ -26,7 +26,7 @@ console.log(user);
 // 2. Write the function isEmpty(obj) which returns true
 // if the object has no properties, false otherwise.
 
-function isEmpty(obj) {
+const isEmpty = (obj: Object): boolean => {
   return Object.keys(obj).length === 0;
 }
 
@@ -52,34 +52,26 @@ user2.name = "Pete";
 let salaries = {
   John: 100,
   Ann: 160,
-  Pete: 130
+  Pete: 130,
+  "Jim Smith": 250,
 }
 
 // Write the code to sum all salaries and store in the variable sum.
 // Should be 390 in the example above.
 
 // If salaries is empty, then the result must be 0.
-const salariesSum = (salaries) => {
+const salariesSum = (salaries: Object): number => {
   return Object.keys(salaries).reduce(
     (acc, current) => acc + salaries[current],
     0);
 }
-console.log(salariesSum(salaries) === 390);
 
 // Property flags
 // https://javascript.info/property-descriptors#property-flags
 let descriptor = Object.getOwnPropertyDescriptor(salaries, "John");
 console.log(descriptor);
 
-// Proxy
-var handler = {
-    get: function(obj, prop) {
-        return prop in obj ?
-            obj[prop] :
-            "missing";
-    }
-};
-
-var p = new Proxy({}, handler);
-console.log(p.someMissingProperty)
-console.log(p.someMissingProperty === "missing")
+module.exports = {
+  isEmpty,
+  salariesSum
+}
