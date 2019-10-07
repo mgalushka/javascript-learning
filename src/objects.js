@@ -141,6 +141,13 @@ const primitiveEquals = (a: any, b: any): boolean => {
   return true;
 }
 
+let rabbit = {};  // object
+rabbit.speak = (line: string): void => {
+  console.log(`The rabbit says '${line}'`);
+}
+
+rabbit.speak("Wow!");
+
 module.exports = {
   isEmpty,
   salariesSum,
