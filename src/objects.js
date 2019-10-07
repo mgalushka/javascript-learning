@@ -154,7 +154,7 @@ let squirrel = {
   }
 };  // object
 
-squirrel.jump();
+squirrel.jump();  // https://jsfiddle.net/mgalushka/zjv3prk9/1/
 
 module.exports = {
   isEmpty,
