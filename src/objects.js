@@ -148,6 +148,14 @@ rabbit.speak = (line: string): void => {
 
 rabbit.speak("Wow!");
 
+let squirrel = {
+  jump: (): void => {
+    console.log("Squirrel just jumped!");
+  }
+};  // object
+
+squirrel.jump();
+
 module.exports = {
   isEmpty,
   salariesSum,
