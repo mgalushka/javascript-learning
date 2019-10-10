@@ -165,9 +165,17 @@ const callOptional = (): number => {
   return object?.version ?? 1;
 }
 
+const callOptional2 = (): ?number => {
+  const object: {value: number, version?: number} = {
+    value: 7
+  };
+  return object?.version;
+}
+
 module.exports = {
   isEmpty,
   salariesSum,
   deepEquals,
-  callOptional
+  callOptional,
+  callOptional2
 }
