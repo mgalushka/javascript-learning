@@ -46,3 +46,7 @@ test('typeof', () => {
   expect(typeof undefined).toEqual("undefined");
   expect(typeof [1]).toEqual("object");
 });
+
+test('test optional', () => {
+  expect(objects.callOptional()).toEqual(1);
+});

@@ -156,8 +156,18 @@ let squirrel = {
 
 squirrel.jump();  // https://jsfiddle.net/mgalushka/zjv3prk9/1/
 
+
+const callOptional = (): number => {
+  const object: {value: number, version?: number} = {
+    value: 7,
+    version: undefined
+  };
+  return object?.version ?? 1;
+}
+
 module.exports = {
   isEmpty,
   salariesSum,
-  deepEquals
+  deepEquals,
+  callOptional
 }
