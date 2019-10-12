@@ -156,6 +156,9 @@ let squirrel = {
 
 squirrel.jump();  // https://jsfiddle.net/mgalushka/zjv3prk9/1/
 
+let killerRabbit = Object.create(rabbit);
+console.log(killerRabbit);
+console.log(Object.getPrototypeOf(killerRabbit));
 
 const callOptional = (): number => {
   const object: {value: number, version?: number} = {
@@ -171,6 +174,8 @@ const callOptional2 = (): ?number => {
   };
   return object?.version;
 }
+
+console.log(Object.prototype);
 
 module.exports = {
   isEmpty,
