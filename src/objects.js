@@ -177,10 +177,32 @@ const callOptional2 = (): ?number => {
 
 console.log(Object.prototype);
 
+export type TimesType = 1 | 2 | 4 | 5 | 6 | 8;
+
+const Times =
+  Object.freeze({
+    "HOURLY": 1,
+    "DAILY": 2,
+    "WEEKLY": 4,
+    "SIX_HOURS": 5,
+    "TWELVE_HOURS": 6,
+    "REALTIME": 8
+  });
+
+const frequency = (value: number): TimesType => {
+  if (value in Object.values(Times)) {
+    // we checked value compatibility before casting
+    return ((value: any): TimesType);
+  }
+  return Times.DAILY;
+}
+
 module.exports = {
   isEmpty,
   salariesSum,
   deepEquals,
   callOptional,
-  callOptional2
+  callOptional2,
+  Times,
+  frequency
 }

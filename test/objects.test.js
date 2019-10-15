@@ -47,7 +47,7 @@ test('typeof', () => {
   expect(typeof [1]).toEqual("object");
 });
 
-test('test optional', () => {
-  expect(objects.callOptional()).toEqual(1);
-  expect(objects.callOptional2()).toBeUndefined();
+test('test cast', () => {
+  expect(objects.frequency(5)).toEqual(objects.Times.SIX_HOURS);
+  expect(objects.frequency(12)).toEqual(objects.Times.DAILY);
 });
