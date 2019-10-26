@@ -11,7 +11,7 @@ const portfolio: Transaction[] = [
   {index: "MSFT", date: "2019-04-01", amount: 5},
   {index: "MSFT", date: "2019-05-01", amount: 42},
   {index: "APPL", date: "2019-03-01", amount: 1},
-  {index: "APPL", date: "2019-11-01", amount: 43},
+  {index: "APPL", date: "2019-11-01", amount: 42},
 ];
 
 const mappedByIndex: Map<string, Transaction[]> = portfolio.reduce(
