@@ -23,7 +23,7 @@ var dataStore = (function<T>(): DataStore<T> {
 
 dataStore.push(1);
 dataStore.push(12);
-dataStore.push(12);
+dataStore.push(18);
 dataStore.push(13);
 dataStore.push(2);
 dataStore.push(17);
