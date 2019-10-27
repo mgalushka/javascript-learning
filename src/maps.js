@@ -71,8 +71,53 @@ let Tracker = (trx: Transaction[]) => {
     S.forEach((k, v) => console.log(`${v} => ${JSON.stringify([...k])}`));
   }
 
-  const matchAndAdjust = (tr: Transaction): ?Transaction => {
-    return null;
+  const isOpposite = (a: Transaction, b: Transaction): boolean => {
+    return a.direction !== b.direction;
+  }
+
+  const matchAndAdjust = (tr: Transaction): [Transaction, ?Transaction] => {
+    let matched: [Transaction, ?Transaction];
+
+    // -------------------------------
+    // Same day matching
+    const indexMap = S.get(tr.index) ?? new Map();
+    if (indexMap) {
+      const dateArray: Transaction[] = indexMap.get(tr.date) ?? [];
+      for (let i = 0; i < dateArray.length; i++){
+        const t: Transaction = dateArray[i];
+
+        // if opposite - matched same day
+        if (isOpposite(tr, t)) {
+          // same day full matched amount
+          if (tr.amount <= t.amount) {
+            let matched = Object.assign(tr);
+            t.amount -= tr.amount;
+            if (t.amount == 0) {
+              dateArray.splice(i, 1);
+              cleanupDelete(t);
+            }
+            return [Object.assign(tr), matched];
+          }
+          // same day - partial match
+          else {
+            let matched = Object.assign(t);
+            let remaining = Object.assign(t);
+            remaining.amount -= tr.amount;
+            dateArray.splice(i, 1, remaining);
+            return [Object.assign(remaining), Object.assign(t)];
+          }
+        }
+        // not opposite - add to holding
+        else {
+          // TODO: add to Holding
+        }
+
+      } // dateArray loop
+    }
+
+    // -------------------------------
+
+    return [Object.assign(tr), null];
   }
 
   return {
@@ -88,26 +133,23 @@ type MatchedTransactions = [Transaction, ?Transaction];
 const matching = (): MatchedTransactions[] => {
   const pairs: MatchedTransactions[] = [];
   const T = Tracker(portfolio);
-  T.print();
+  // T.print();
   let current: ?Transaction = null;
   while (current = T.next()) {
     if (current === null) break;
-    console.log(current);
+    // console.log(current);
     T.print();
     const matched = T.matchAndAdjust(current);
-    if (matched) {
-      pairs.push([current, matched]);
-    } else {
-      pairs.push([current, null]);
-    }
+    pairs.push(matched);
+    console.log(pairs);
   }
   return pairs;
 }
 
 const portfolio: Transaction[] = [
   {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
-  {index: "MSFT", date: "2019-04-01", amount: 5, price: 2.09, direction: "BUY"},
-  {index: "MSFT", date: "2019-05-01", amount: 42, price: 2.22, direction: "BUY"},
+  {index: "MSFT", date: "2019-03-01", amount: 5, price: 2.09, direction: "BUY"},
+  {index: "MSFT", date: "2019-03-01", amount: 7, price: 2.22, direction: "BUY"},
   {index: "APPL", date: "2019-03-01", amount: 1, price: 12.06, direction: "BUY"},
   {index: "APPL", date: "2019-11-01", amount: 44, price: 12.08, direction: "SELL"},
 ];
