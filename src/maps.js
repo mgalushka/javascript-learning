@@ -14,29 +14,15 @@ const copyTransaction = (tr: Transaction): Transaction => Object.assign(tr);
 const copyTransactions = (trx: Transaction[]): Transaction[] =>
   trx.map(t => copyTransaction(t));
 
-const mapByIndex = (trx: Transaction[]): Map<string, Transaction[]> => {
+const mapByX = (trx: Transaction[], field: string): Map<string, Transaction[]> => {
   return trx.reduce(
     (map: Map<string, Transaction[]>, tr: Transaction) => {
-      if (map.has(tr.index)) {
-        let indexArray: Transaction[] = map.get(tr.index) ?? [];
+      if (!(field in tr)) return map;
+      if (map.has(tr[field])) {
+        let indexArray: Transaction[] = map.get(tr[field]) ?? [];
         indexArray.push(tr);
       } else {
-        map.set(tr.index, [tr]);
-      }
-      return map;
-    },
-    new Map(),
-  );
-}
-
-const mapByDate = (trx: Transaction[]): Map<string, Transaction[]> => {
-  return trx.reduce(
-    (map: Map<string, Transaction[]>, tr: Transaction) => {
-      if (map.has(tr.date)) {
-        let indexArray: Transaction[] = map.get(tr.date) ?? [];
-        indexArray.push(tr);
-      } else {
-        map.set(tr.date, [tr]);
+        map.set(tr[field], [tr]);
       }
       return map;
     },
@@ -47,20 +33,10 @@ const mapByDate = (trx: Transaction[]): Map<string, Transaction[]> => {
 let Tracker = (trx: Transaction[]) => {
   const transactions: Transaction[] = copyTransactions(trx);
 
-  const temp = mapByIndex(transactions);
+  const temp = mapByX(transactions, "index");
   let S: Map<string, Map<string, Transaction[]>> = new Map();
   temp.forEach((trx: Transaction[], index: string) => {
-    if (!S.has(index)) S.set(index, new Map());
-    let indexMap = S.get(index);
-    if (indexMap) {
-      trx.map(t => {
-        if (!indexMap.has(t.date)) indexMap.set(t.date, [t]);
-        else {
-          let dateMap = indexMap.get(t.date)
-          if (dateMap) dateMap.push(t);
-        }
-      });
-    }
+    S.set(index, mapByX(trx, "date"));
   });
 
   const pop = (): ?Transaction => {
@@ -112,16 +88,16 @@ const portfolio: Transaction[] = [
 
 matching();
 
-const mappedByIndex = mapByIndex(portfolio);
+const mappedByIndex = mapByX(portfolio, "index");
 
 const copy: Transaction[] = copyTransactions(portfolio);
 portfolio.splice(1, 3);
-console.log(`Portfolio:  ${JSON.stringify(portfolio)}`);
-console.log(`Copy:  ${JSON.stringify(copy)}`);
+// console.log(`Portfolio:  ${JSON.stringify(portfolio)}`);
+// console.log(`Copy:  ${JSON.stringify(copy)}`);
 
 
 const byIndex = mappedByIndex.get('APPL');
 if (byIndex) {
   const deleted = byIndex.splice(0, 2);
-  console.log(`Deleted from Map: ${JSON.stringify(deleted)}`);
+  // console.log(`Deleted from Map: ${JSON.stringify(deleted)}`);
 }
