@@ -1,17 +1,21 @@
 // @flow
 
+type TransactionDirection = "BUY" | "SELL";
+
 type Transaction = {
   index: string,
   date: string,
-  amount: number
+  amount: number,
+  price: number,
+  direction: TransactionDirection,
 }
 
 const portfolio: Transaction[] = [
-  {index: "MSFT", date: "2019-03-01", amount: 12},
-  {index: "MSFT", date: "2019-04-01", amount: 5},
-  {index: "MSFT", date: "2019-05-01", amount: 42},
-  {index: "APPL", date: "2019-03-01", amount: 1},
-  {index: "APPL", date: "2019-11-01", amount: 44},
+  {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
+  {index: "MSFT", date: "2019-04-01", amount: 5, price: 2.09, direction: "BUY"},
+  {index: "MSFT", date: "2019-05-01", amount: 42, price: 2.22, direction: "BUY"},
+  {index: "APPL", date: "2019-03-01", amount: 1, price: 12.06, direction: "BUY"},
+  {index: "APPL", date: "2019-11-01", amount: 44, price: 12.08, direction: "SELL"},
 ];
 
 const mappedByIndex: Map<string, Transaction[]> = portfolio.reduce(
