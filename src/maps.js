@@ -18,11 +18,12 @@ const mapByX = (trx: Transaction[], field: string): Map<string, Transaction[]> =
   return trx.reduce(
     (map: Map<string, Transaction[]>, tr: Transaction) => {
       if (!(field in tr)) return map;
-      if (map.has(tr[field])) {
-        let indexArray: Transaction[] = map.get(tr[field]) ?? [];
+      const key: string = (tr[field]: string);
+      if (map.has(key)) {
+        let indexArray: Transaction[] = map.get(key) ?? [];
         indexArray.push(tr);
       } else {
-        map.set(tr[field], [tr]);
+        map.set(key, [tr]);
       }
       return map;
     },
