@@ -10,6 +10,14 @@ type Transaction = {
   direction: TransactionDirection,
 }
 
+const copyTransaction = (tr: Transaction): Transaction => Object.assign(tr);
+const copyTransactions = (trx: Transaction[]): Transaction[] =>
+  trx.map(t => copyTransaction(t));
+
+let Tracker = {
+
+}
+
 const portfolio: Transaction[] = [
   {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
   {index: "MSFT", date: "2019-04-01", amount: 5, price: 2.09, direction: "BUY"},
@@ -18,26 +26,31 @@ const portfolio: Transaction[] = [
   {index: "APPL", date: "2019-11-01", amount: 44, price: 12.08, direction: "SELL"},
 ];
 
-const mappedByIndex: Map<string, Transaction[]> = portfolio.reduce(
-  (map: Map<string, Transaction[]>, tr: Transaction) => {
-    if (map.has(tr.index)) {
-      let indexArray: Transaction[] = map.get(tr.index) ?? [];
-      indexArray.push(tr);
-    } else {
-      map.set(tr.index, [tr]);
-    }
-    return map;
-  },
-  new Map(),
-);
+const mapByIndex = (trx: Transaction[]): Map<string, Transaction[]> => {
+  return trx.reduce(
+    (map: Map<string, Transaction[]>, tr: Transaction) => {
+      if (map.has(tr.index)) {
+        let indexArray: Transaction[] = map.get(tr.index) ?? [];
+        indexArray.push(tr);
+      } else {
+        map.set(tr.index, [tr]);
+      }
+      return map;
+    },
+    new Map(),
+  );
+}
 
-console.log(mappedByIndex);
+const mappedByIndex = mapByIndex(portfolio);
+
+const copy: Transaction[] = copyTransactions(portfolio);
+portfolio.splice(1, 3);
+console.log(`Portfolio:  ${JSON.stringify(portfolio)}`);
+console.log(`Copy:  ${JSON.stringify(copy)}`);
+
+
 const byIndex = mappedByIndex.get('APPL');
 if (byIndex) {
   const deleted = byIndex.splice(0, 2);
   console.log(`Deleted from Map: ${JSON.stringify(deleted)}`);
 }
-
-portfolio.splice(2, 2);
-
-console.log(mappedByIndex);
