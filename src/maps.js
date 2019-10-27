@@ -39,6 +39,20 @@ let Tracker = (trx: Transaction[]) => {
     S.set(index, mapByX(trx, "date"));
   });
 
+  const cleanupDelete = (tr: Transaction): void => {
+    let mp = S.get(tr.index);
+    if (mp){
+      let arr = mp.get(tr.date);
+      if (arr && arr.length === 0) {
+        let indexToClear: ?Map<string, Transaction[]> = S.get(tr.index);
+        if (indexToClear) indexToClear.delete(tr.date);
+        if (indexToClear && indexToClear.size === 0) {
+          S.delete(tr.index);
+        }
+      }
+    }
+  }
+
   const pop = (): ?Transaction => {
     if (S.size === 0) return null;
     const first = S.values().next().value;
@@ -48,13 +62,7 @@ let Tracker = (trx: Transaction[]) => {
     if (!arr || arr.length === 0) return null;
     const result: Transaction = arr[0];
     const deletedTrx: Transaction = arr.splice(0, 1)[0];
-    if (arr.length === 0) {
-      let indexToClear: ?Map<string, Transaction[]> = S.get(deletedTrx.index);
-      if (indexToClear) indexToClear.delete(deletedTrx.date);
-      if (indexToClear && indexToClear.size === 0) {
-        S.delete(deletedTrx.index);
-      }
-    }
+    cleanupDelete(deletedTrx);
     return result;
   }
 
