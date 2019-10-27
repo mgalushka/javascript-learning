@@ -40,7 +40,22 @@ let Tracker = (trx: Transaction[]) => {
   });
 
   const pop = (): ?Transaction => {
-    return null;
+    if (S.size === 0) return null;
+    const first = S.values().next().value;
+    if (!first) return null;
+    if (first.size === 0) return null;
+    const arr = first.values().next().value;
+    if (!arr || arr.length === 0) return null;
+    const result: Transaction = arr[0];
+    const deletedTrx: Transaction = arr.splice(0, 1)[0];
+    if (arr.length === 0) {
+      let indexToClear: ?Map<string, Transaction[]> = S.get(deletedTrx.index);
+      if (indexToClear) indexToClear.delete(deletedTrx.date);
+      if (indexToClear && indexToClear.size === 0) {
+        S.delete(deletedTrx.index);
+      }
+    }
+    return result;
   }
 
   const print = (): void => {
@@ -68,6 +83,8 @@ const matching = (): MatchedTransactions[] => {
   let current: ?Transaction = null;
   while (current = T.next()) {
     if (current === null) break;
+    console.log(current);
+    T.print();
     const matched = T.matchAndAdjust(current);
     if (matched) {
       pairs.push([current, matched]);
