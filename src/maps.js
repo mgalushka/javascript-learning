@@ -107,7 +107,7 @@ let Tracker = (trx: Transaction[]) => {
             return [Object.assign(remaining), Object.assign(t)];
           }
         }
-        // not opposite - add to holding
+        // not opposite - add to holding 
         else {
           // TODO: add to Holding
         }
