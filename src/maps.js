@@ -31,8 +31,60 @@ const mapByX = (trx: Transaction[], field: string): Map<string, Transaction[]> =
   );
 }
 
+type HoldingStats = {
+  // transactions: Transaction[],
+  amount: number,
+  totalCost: number,
+}
+
+// keep track of Holding
+let Holding = () => {
+  let stats: Map<string, HoldingStats> = new Map();
+
+  const all = (): Map<string, HoldingStats> => stats;
+  const allByIndex = (index: string): ?HoldingStats => stats.get(index);
+  const add = (tr: Transaction) => {
+    if (!stats.has(tr.index)) {
+      stats.set(tr.index, {
+          // transactions: [Object.assign(tr)],
+          amount: tr.amount,
+          totalCost: tr.price * tr.amount,
+      });
+    } else {
+      let current: ?HoldingStats = stats.get(tr.index) ?? null;
+      if (current) {
+        // current.transactions.push(Object.assign(tr));
+        current.amount += tr.amount;
+        current.totalCost += tr.price * tr.amount;
+      }
+    }
+  };
+  const remove = (tr: Transaction): void => {
+    if (stats.has(tr.index)) {
+      let current: ?HoldingStats = stats.get(tr.index) ?? null;
+      if (
+        current &&
+        current.amount >= tr.amount &&
+        current.totalCost >= tr.price * tr.amount
+      ) {
+        // current.transactions.push(Object.assign(tr));
+        current.amount -= tr.amount;
+        current.totalCost -= tr.price * tr.amount;
+      }
+    }
+  };
+
+  return {
+    all: all,
+    allByIndex: allByIndex,
+    add: add,
+    remove: remove,
+  }
+}
+
 let Tracker = (trx: Transaction[]) => {
   const transactions: Transaction[] = copyTransactions(trx);
+  const holding = Holding();
 
   const temp = mapByX(transactions, "index");
   let S: Map<string, Map<string, Transaction[]>> = new Map();
@@ -107,9 +159,9 @@ let Tracker = (trx: Transaction[]) => {
             return [Object.assign(remaining), Object.assign(t)];
           }
         }
-        // not opposite - add to holding 
+        // not opposite - add to holding
         else {
-          // TODO: add to Holding
+          holding.add(tr);
         }
 
       } // dateArray loop
