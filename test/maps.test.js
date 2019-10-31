@@ -11,11 +11,6 @@ const portfolio: Transaction[] = [
   {index: "APPL", date: "2019-11-01", amount: 44, price: 12.08, direction: "SELL"},
 ];
 
-const oppositePairsPortfolioSameDay: Transaction[] = [
-  {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
-  {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.09, direction: "BUY"},
-];
-
 test('copy transactions test', () => {
   expect(maps.copyTransactions(portfolio)).toEqual(portfolio);
 });
@@ -53,6 +48,10 @@ test('test Tracker next exchausiton', () => {
 });
 
 test('test Tracker same day match', () => {
+  const oppositePairsPortfolioSameDay: Transaction[] = [
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.09, direction: "BUY"},
+  ];
   let T = maps.Tracker(oppositePairsPortfolioSameDay);
   const current: ?Transaction = T.next();
   expect(current).not.toBeNull();
