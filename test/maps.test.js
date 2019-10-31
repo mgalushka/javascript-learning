@@ -11,6 +11,6 @@ const portfolio: Transaction[] = [
   {index: "APPL", date: "2019-11-01", amount: 44, price: 12.08, direction: "SELL"},
 ];
 
-test('copy', () => {
+test('copy transactions test', () => {
   expect(maps.copyTransactions(portfolio)).toEqual(portfolio);
 });
