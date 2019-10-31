@@ -1,14 +1,14 @@
 // @flow
 
-type TransactionDirection = "BUY" | "SELL";
+export type TransactionDirection = "BUY" | "SELL";
 
-type Transaction = {
+export type Transaction = {
   index: string,
   date: string,
   amount: number,
   price: number,
   direction: TransactionDirection,
-}
+};
 
 const copyTransaction = (tr: Transaction): Transaction => Object.assign(tr);
 const copyTransactions = (trx: Transaction[]): Transaction[] =>
@@ -134,8 +134,10 @@ let Tracker = (trx: Transaction[]) => {
     // Same day matching
     const indexMap = S.get(tr.index) ?? new Map();
     if (indexMap) {
+
+      // same day matching
       const dateArray: Transaction[] = indexMap.get(tr.date) ?? [];
-      for (let i = 0; i < dateArray.length; i++){
+      for (let i = 0; i < dateArray.length; i++) {
         const t: Transaction = dateArray[i];
 
         // if opposite - matched same day
@@ -164,7 +166,11 @@ let Tracker = (trx: Transaction[]) => {
           holding.add(tr);
         }
 
-      } // dateArray loop
+      } // same day matching - dateArray loop
+
+      // 30 days rule - bad and breakfasting
+
+      //
     }
 
     // -------------------------------
@@ -179,7 +185,7 @@ let Tracker = (trx: Transaction[]) => {
   }
 }
 
-type MatchedTransactions = [Transaction, ?Transaction];
+export type MatchedTransactions = [Transaction, ?Transaction];
 
 // core algorithm
 const matching = (): MatchedTransactions[] => {
@@ -220,4 +226,13 @@ const byIndex = mappedByIndex.get('APPL');
 if (byIndex) {
   const deleted = byIndex.splice(0, 2);
   // console.log(`Deleted from Map: ${JSON.stringify(deleted)}`);
+}
+
+module.exports = {
+    copyTransaction,
+    copyTransactions,
+    mapByX,
+    Tracker,
+    matching,
+    Holding,
 }
