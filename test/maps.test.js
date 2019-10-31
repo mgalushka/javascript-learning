@@ -70,3 +70,23 @@ test('test Tracker same day match', () => {
     );
   }
 });
+
+test('test Tracker different indexes not matched', () => {
+  const notMatched: Transaction[] = [
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
+    {index: "APPL", date: "2019-03-01", amount: 12, price: 2.09, direction: "BUY"},
+  ];
+  let T = maps.Tracker(notMatched);
+  const current: ?Transaction = T.next();
+  expect(current).not.toBeNull();
+  expect(current).toEqual(
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
+  );
+  if (current) {
+    const pair: [Transaction, ?Transaction] = T.matchAndAdjust(current);
+    expect(pair[1]).toBeNull();
+    expect(pair[0]).toEqual(
+      {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
+    );
+  }
+});
