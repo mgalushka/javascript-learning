@@ -47,6 +47,24 @@ test('test Tracker next exchausiton', () => {
   expect(T.next()).toBeNull();
 });
 
+const fiedsOnly = {
+  asymmetricMatch: actual => actual === 'foo' || actual === 'bar'
+};
+
+test('test Tracker Holding on next', () => {
+  const oppositePairsPortfolioSameDay: Transaction[] = [
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.09, direction: "BUY"},
+  ];
+  let T = maps.Tracker(oppositePairsPortfolioSameDay);
+  T.next();
+  expect(T.holding.allByIndex('MSFT')).toEqual({
+    amount: 12,
+    totalCost: 12 * 2.44,
+  });
+
+});
+
 test('test Tracker same day match', () => {
   const oppositePairsPortfolioSameDay: Transaction[] = [
     {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},

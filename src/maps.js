@@ -115,6 +115,7 @@ let Tracker = (trx: Transaction[]) => {
     if (!arr || arr.length === 0) return null;
     const result: Transaction = arr[0];
     const deletedTrx: Transaction = arr.splice(0, 1)[0];
+    holding.add(Object.assign(deletedTrx));
     cleanupDelete(deletedTrx);
     return result;
   }
@@ -183,6 +184,7 @@ let Tracker = (trx: Transaction[]) => {
     next: pop,
     matchAndAdjust: matchAndAdjust,
     print: print,
+    holding: holding,
   }
 }
 
