@@ -144,12 +144,13 @@ let Tracker = (trx: Transaction[]) => {
         if (isOpposite(tr, t)) {
           // same day full matched amount
           if (tr.amount <= t.amount) {
-            let matched = Object.assign(tr);
             t.amount -= tr.amount;
             if (t.amount == 0) {
               dateArray.splice(i, 1);
               cleanupDelete(t);
             }
+            let matched = Object.assign(t);
+            matched.amount = tr.amount;
             return [Object.assign(tr), matched];
           }
           // same day - partial match
