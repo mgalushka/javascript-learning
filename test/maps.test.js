@@ -47,10 +47,6 @@ test('test Tracker next exchausiton', () => {
   expect(T.next()).toBeNull();
 });
 
-const fiedsOnly = {
-  asymmetricMatch: actual => actual === 'foo' || actual === 'bar'
-};
-
 test('test Tracker Holding on next', () => {
   const oppositePairsPortfolioSameDay: Transaction[] = [
     {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
