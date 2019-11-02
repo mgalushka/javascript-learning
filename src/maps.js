@@ -115,7 +115,6 @@ let Tracker = (trx: Transaction[]) => {
     if (!arr || arr.length === 0) return null;
     const result: Transaction = arr[0];
     const deletedTrx: Transaction = arr.splice(0, 1)[0];
-    holding.add(Object.assign(deletedTrx));
     cleanupDelete(deletedTrx);
     return result;
   }
@@ -128,7 +127,7 @@ let Tracker = (trx: Transaction[]) => {
     return a.direction !== b.direction;
   }
 
-  const matchAndAdjust = (tr: Transaction): [Transaction, ?Transaction] => {
+  const matchAndAdjust = (tr: Transaction): [Transaction, ?Transaction] | 'SKIP' => {
     let matched: [Transaction, ?Transaction];
 
     // -------------------------------
@@ -163,12 +162,14 @@ let Tracker = (trx: Transaction[]) => {
             return [Object.assign(remaining), Object.assign(t)];
           }
         }
-        // not opposite - add to holding
-        else {
-          holding.add(tr);
-        }
-
       } // same day matching - dateArray loop
+
+      // Add to holding
+      if (tr.direction === 'BUY') {
+        console.log(`Adding to Holding: ${JSON.stringify(tr)}`);
+        holding.add(tr);
+        return 'SKIP';
+      }
 
       // 30 days rule - bad and breakfasting
 
@@ -199,10 +200,12 @@ const matching = (): MatchedTransactions[] => {
   while (current = T.next()) {
     if (current === null) break;
     // console.log(current);
-    T.print();
+    // T.print();
     const matched = T.matchAndAdjust(current);
-    pairs.push(matched);
-    console.log(pairs);
+    if (matched !== 'SKIP') {
+      pairs.push(matched);
+    }
+    // console.log(pairs);
   }
   return pairs;
 }

@@ -54,10 +54,7 @@ test('test Tracker Holding on next', () => {
   ];
   let T = maps.Tracker(oppositePairsPortfolioSameDay);
   T.next();
-  expect(T.holding.allByIndex('MSFT')).toEqual({
-    amount: 12,
-    totalCost: 12 * 2.44,
-  });
+  expect(T.holding.all()).toEqual(new Map());
 
 });
 
@@ -73,7 +70,7 @@ test('test Tracker same day match', () => {
     {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
   );
   if (current) {
-    const pair: [Transaction, ?Transaction] = T.matchAndAdjust(current);
+    const pair: [Transaction, ?Transaction] | 'SKIP' = T.matchAndAdjust(current);
     expect(pair[1]).not.toBeNull();
     expect(pair[0]).toEqual(
       {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
@@ -84,22 +81,57 @@ test('test Tracker same day match', () => {
   }
 });
 
-test('test Tracker different indexes not matched', () => {
-  const notMatched: Transaction[] = [
-    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
-    {index: "APPL", date: "2019-03-01", amount: 12, price: 2.09, direction: "BUY"},
+test('test complex next() and Tracker with same day match', () => {
+  const oppositePairsPortfolioSameDay: Transaction[] = [
+    {index: "MSFT", date: "2019-03-01", amount: 4, price: 2.01, direction: "SELL"},
+    {index: "MSFT", date: "2019-03-01", amount: 8, price: 2.02, direction: "SELL"},
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.03, direction: "BUY"},
   ];
-  let T = maps.Tracker(notMatched);
+  let T = maps.Tracker(oppositePairsPortfolioSameDay);
   const current: ?Transaction = T.next();
   expect(current).not.toBeNull();
   expect(current).toEqual(
-    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
+    {index: "MSFT", date: "2019-03-01", amount: 4, price: 2.01, direction: "SELL"},
   );
   if (current) {
-    const pair: [Transaction, ?Transaction] = T.matchAndAdjust(current);
-    expect(pair[1]).toBeNull();
+    const pair: [Transaction, ?Transaction] | 'SKIP' = T.matchAndAdjust(current);
+    expect(pair[1]).not.toBeNull();
     expect(pair[0]).toEqual(
-      {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"},
+      {index: "MSFT", date: "2019-03-01", amount: 4, price: 2.01, direction: "SELL"},
+    );
+    expect(pair[1]).toEqual(
+      {index: "MSFT", date: "2019-03-01", amount: 4, price: 2.03, direction: "BUY"},
     );
   }
+
+});
+
+test('test Tracker different indexes not matched', () => {
+  const notMatched: Transaction[] = [
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.11, direction: "SELL"},
+    {index: "APPL", date: "2019-03-01", amount: 12, price: 2.12, direction: "BUY"},
+  ];
+  let T = maps.Tracker(notMatched);
+  let current: ?Transaction = T.next();
+  expect(current).not.toBeNull();
+  expect(current).toEqual(
+    {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.11, direction: "SELL"},
+  );
+  if (current) {
+    const pair: [Transaction, ?Transaction] | 'SKIP' = T.matchAndAdjust(current);
+    expect(pair[1]).toBeNull();
+    expect(pair[0]).toEqual(
+      {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.11, direction: "SELL"},
+    );
+  }
+  expect(T.holding.allByIndex('MSFT')).toBeUndefined();
+
+  current = T.next();
+  expect(current).not.toBeNull();
+  if (current) {
+    T.matchAndAdjust(current);
+  }
+  expect(T.holding.allByIndex('APPL')).toEqual(
+    {amount: 12, totalCost: 12 * 2.12},
+  );
 });
