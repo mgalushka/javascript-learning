@@ -15,6 +15,14 @@ test('copy transactions test', () => {
   expect(maps.copyTransactions(portfolio)).toEqual(portfolio);
 });
 
+test('copy transaction test', () => {
+  const t: Transaction =
+  {index: "MSFT", date: "2019-03-01", amount: 12, price: 2.44, direction: "SELL"};
+  const copy: Transaction = maps.copyTransaction(t);
+  copy.amount = 100;
+  expect(copy.amount).not.toBe(t.amount);
+});
+
 test('test mapByIndex', () => {
   expect(maps.mapByX(portfolio, 'index').get('MSFT')).toEqual(
     expect.arrayContaining([

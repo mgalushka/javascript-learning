@@ -10,7 +10,7 @@ export type Transaction = {
   direction: TransactionDirection,
 };
 
-const copyTransaction = (tr: Transaction): Transaction => Object.assign(tr);
+const copyTransaction = (tr: Transaction): Transaction => Object.assign({}, tr);
 const copyTransactions = (trx: Transaction[]): Transaction[] =>
   trx.map(t => copyTransaction(t));
 
@@ -46,14 +46,12 @@ let Holding = () => {
   const add = (tr: Transaction) => {
     if (!stats.has(tr.index)) {
       stats.set(tr.index, {
-          // transactions: [Object.assign(tr)],
           amount: tr.amount,
           totalCost: tr.price * tr.amount,
       });
     } else {
       let current: ?HoldingStats = stats.get(tr.index) ?? null;
       if (current) {
-        // current.transactions.push(Object.assign(tr));
         current.amount += tr.amount;
         current.totalCost += tr.price * tr.amount;
       }
@@ -67,7 +65,6 @@ let Holding = () => {
         current.amount >= tr.amount &&
         current.totalCost >= tr.price * tr.amount
       ) {
-        // current.transactions.push(Object.assign(tr));
         current.amount -= tr.amount;
         current.totalCost -= tr.price * tr.amount;
       }
@@ -127,9 +124,10 @@ let Tracker = (trx: Transaction[]) => {
     return a.direction !== b.direction;
   }
 
-  const matchAndAdjust = (tr: Transaction): [Transaction, ?Transaction] | 'SKIP' => {
+  const matchAndAdjust = (inputTr: Transaction): [Transaction, ?Transaction] | 'SKIP' => {
     let matched: [Transaction, ?Transaction];
 
+    const tr: Transaction = copyTransaction(inputTr);
     // -------------------------------
     // Same day matching
     const indexMap = S.get(tr.index) ?? new Map();
@@ -138,28 +136,36 @@ let Tracker = (trx: Transaction[]) => {
       // same day matching
       const dateArray: Transaction[] = indexMap.get(tr.date) ?? [];
       for (let i = 0; i < dateArray.length; i++) {
-        const t: Transaction = dateArray[i];
+        const potentialMatch: Transaction = dateArray[i];
 
         // if opposite - matched same day
-        if (isOpposite(tr, t)) {
+        if (isOpposite(tr, potentialMatch)) {
           // same day full matched amount
-          if (tr.amount <= t.amount) {
-            t.amount -= tr.amount;
-            if (t.amount == 0) {
+          if (tr.amount <= potentialMatch.amount) {
+            potentialMatch.amount -= tr.amount;
+            if (potentialMatch.amount == 0) {
               dateArray.splice(i, 1);
-              cleanupDelete(t);
+              cleanupDelete(potentialMatch);
             }
-            let matched = Object.assign(t);
+            let matched = copyTransaction(potentialMatch);
             matched.amount = tr.amount;
-            return [Object.assign(tr), matched];
+            return [copyTransaction(tr), matched];
           }
           // same day - partial match
-          else {
-            let matched = Object.assign(t);
-            let remaining = Object.assign(t);
-            remaining.amount -= tr.amount;
+          else {  // tr.amount > potentialMatch.amount
+            let matched = copyTransaction(tr);
+            matched.amount = potentialMatch.amount;
+            console.log(`Matched with: ${JSON.stringify(matched)}`);
+            console.log(`Potential match: ${JSON.stringify(potentialMatch)}`);
+
+            console.log(`Original transaction: ${JSON.stringify(tr)}`);
+            let remaining = copyTransaction(tr);
+            remaining.amount -= potentialMatch.amount;
+            console.log(`Remaining: ${JSON.stringify(remaining)}`);
             dateArray.splice(i, 1, remaining);
-            return [Object.assign(remaining), Object.assign(t)];
+
+            console.log(`To Return: ${JSON.stringify([matched, copyTransaction(potentialMatch)])}`);
+            return [matched, copyTransaction(potentialMatch)];
           }
         }
       } // same day matching - dateArray loop
@@ -178,7 +184,7 @@ let Tracker = (trx: Transaction[]) => {
 
     // -------------------------------
 
-    return [Object.assign(tr), null];
+    return [copyTransaction(tr), null];
   }
 
   return {
@@ -199,13 +205,13 @@ const matching = (): MatchedTransactions[] => {
   let current: ?Transaction = null;
   while (current = T.next()) {
     if (current === null) break;
-    // console.log(current);
+    console.log(`Current: ${JSON.stringify(current)}`);
     // T.print();
     const matched = T.matchAndAdjust(current);
     if (matched !== 'SKIP') {
       pairs.push(matched);
     }
-    // console.log(pairs);
+    console.log(`Transaction: ${JSON.stringify(current)} => ${JSON.stringify(matched)}`);
   }
   return pairs;
 }
