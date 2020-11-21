@@ -19,6 +19,8 @@
  * https://javascript.info/weakmap-weakset#store-unread-flags
 */
 
+'use strict';
+
 type Message = {
   text: string,
   from: string,
