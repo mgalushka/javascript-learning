@@ -25,3 +25,14 @@ test('dividePromise', () => {
     assert.strictEqual(result, 2);
   });
 });
+
+test('Assign to const', () => {
+  const i = 0; // must initialize
+  assert.throws(
+    () => { i = i + 1 },
+    {
+      name: 'TypeError',
+      message: 'Assignment to constant variable.',
+    }
+  );
+});
