@@ -36,3 +36,14 @@ test('Assign to const', () => {
     }
   );
 });
+
+test('Optional chaining', () => {
+  matchResult = null;
+  assert.doesNotThrow(
+    () => {
+      matchResult?.bento ?? 0;
+    },
+  );
+  assert.equal(matchResult, null);
+  assert.equal(matchResult?.bento ?? 0, 0);
+})
